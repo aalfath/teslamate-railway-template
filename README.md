@@ -1,5 +1,7 @@
 # TeslaMate on Railway
 
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/new/template/teslamate-1?utm_medium=integration&utm_source=button&utm_campaign=teslamate)
+
 A Railway template for [TeslaMate](https://github.com/teslamate-org/teslamate), the self-hosted data logger for Tesla cars, with its Grafana dashboards.
 
 This repository is the source of the template. Every app service builds from it, so when a new TeslaMate version is merged here, Railway shows an "update available" notice to everyone who deployed the template, and they choose when to apply it.
