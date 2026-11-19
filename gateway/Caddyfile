@@ -1,0 +1,37 @@
+{
+	admin off
+	auto_https off
+	persist_config off
+	servers {
+		# Railway's edge terminates TLS and forwards from a private address.
+		trusted_proxies static private_ranges
+		client_ip_headers X-Real-IP X-Forwarded-For
+	}
+}
+
+:{$PORT} {
+	encode zstd gzip
+
+	# Health check for Railway, answers without a login.
+	handle /healthz {
+		respond "ok" 200
+	}
+
+	# Grafana has its own login (admin, GF_SECURITY_ADMIN_PASSWORD).
+	handle /grafana* {
+		reverse_proxy {$GRAFANA_UPSTREAM}
+	}
+
+	# TeslaMate has no login of its own: protect it with basic auth.
+	handle {
+		basic_auth {
+			{$WEB_USERNAME} {$WEB_PASSWORD_HASH}
+		}
+		reverse_proxy {$TESLAMATE_UPSTREAM}
+	}
+
+	log {
+		output stdout
+		format console
+	}
+}
